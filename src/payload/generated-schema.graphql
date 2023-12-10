@@ -1,41 +1,41 @@
 type Query {
-  Page(id: Int!, draft: Boolean): Page
+  Page(id: String!, draft: Boolean): Page
   Pages(draft: Boolean, where: Page_where, limit: Int, page: Int, sort: String): Pages
-  docAccessPage(id: Int!): pagesDocAccess
-  versionPage(id: Int): PageVersion
+  docAccessPage(id: String!): pagesDocAccess
+  versionPage(id: String): PageVersion
   versionsPages(where: versionsPage_where, limit: Int, page: Int, sort: String): versionsPages
-  Post(id: Int!, draft: Boolean): Post
+  Post(id: String!, draft: Boolean): Post
   Posts(draft: Boolean, where: Post_where, limit: Int, page: Int, sort: String): Posts
-  docAccessPost(id: Int!): postsDocAccess
-  versionPost(id: Int): PostVersion
+  docAccessPost(id: String!): postsDocAccess
+  versionPost(id: String): PostVersion
   versionsPosts(where: versionsPost_where, limit: Int, page: Int, sort: String): versionsPosts
-  Project(id: Int!, draft: Boolean): Project
+  Project(id: String!, draft: Boolean): Project
   Projects(draft: Boolean, where: Project_where, limit: Int, page: Int, sort: String): Projects
-  docAccessProject(id: Int!): projectsDocAccess
-  versionProject(id: Int): ProjectVersion
+  docAccessProject(id: String!): projectsDocAccess
+  versionProject(id: String): ProjectVersion
   versionsProjects(where: versionsProject_where, limit: Int, page: Int, sort: String): versionsProjects
-  Media(id: Int!, draft: Boolean): Media
+  Media(id: String!, draft: Boolean): Media
   allMedia(draft: Boolean, where: Media_where, limit: Int, page: Int, sort: String): allMedia
-  docAccessMedia(id: Int!): mediaDocAccess
-  Category(id: Int!, draft: Boolean): Category
+  docAccessMedia(id: String!): mediaDocAccess
+  Category(id: String!, draft: Boolean): Category
   Categories(draft: Boolean, where: Category_where, limit: Int, page: Int, sort: String): Categories
-  docAccessCategory(id: Int!): categoriesDocAccess
-  User(id: Int!, draft: Boolean): User
+  docAccessCategory(id: String!): categoriesDocAccess
+  User(id: String!, draft: Boolean): User
   Users(draft: Boolean, where: User_where, limit: Int, page: Int, sort: String): Users
-  docAccessUser(id: Int!): usersDocAccess
+  docAccessUser(id: String!): usersDocAccess
   meUser: usersMe
   initializedUser: Boolean
-  Comment(id: Int!, draft: Boolean): Comment
+  Comment(id: String!, draft: Boolean): Comment
   Comments(draft: Boolean, where: Comment_where, limit: Int, page: Int, sort: String): Comments
-  docAccessComment(id: Int!): commentsDocAccess
-  versionComment(id: Int): CommentVersion
+  docAccessComment(id: String!): commentsDocAccess
+  versionComment(id: String): CommentVersion
   versionsComments(where: versionsComment_where, limit: Int, page: Int, sort: String): versionsComments
-  Redirect(id: Int!, draft: Boolean): Redirect
+  Redirect(id: String!, draft: Boolean): Redirect
   Redirects(draft: Boolean, where: Redirect_where, limit: Int, page: Int, sort: String): Redirects
-  docAccessRedirect(id: Int!): redirectsDocAccess
-  PayloadPreference(id: Int!, draft: Boolean): PayloadPreference
+  docAccessRedirect(id: String!): redirectsDocAccess
+  PayloadPreference(id: String!, draft: Boolean): PayloadPreference
   PayloadPreferences(draft: Boolean, where: PayloadPreference_where, limit: Int, page: Int, sort: String): PayloadPreferences
-  docAccessPayloadPreference(id: Int!): payload_preferencesDocAccess
+  docAccessPayloadPreference(id: String!): payload_preferencesDocAccess
   Settings(draft: Boolean): Settings
   docAccessSettings: settingsDocAccess
   Header(draft: Boolean): Header
@@ -46,7 +46,7 @@ type Query {
 }
 
 type Page {
-  id: Int
+  id: String
   title: String
   publishedAt: DateTime
   hero: Page_Hero
@@ -119,7 +119,7 @@ enum Page_Hero_Links_Link_appearance {
 }
 
 type Media {
-  id: Int
+  id: String
   alt: String!
   caption(depth: Int): JSON
   updatedAt: DateTime
@@ -290,7 +290,7 @@ input Page_Hero_Media_where_or {
   id: Page_Hero_Media_id_operator
 }
 
-union Page_Layout = Cta | Content | MediaBlock | Archive
+union Page_Layout = Cta | Content | MediaBlock | Archive | ProfileEntries
 
 type Cta {
   invertBackground: Boolean
@@ -587,7 +587,7 @@ enum Archive_relationTo {
 }
 
 type Category {
-  id: Int
+  id: String
   title: String
   parent: Category
   breadcrumbs: [Category_Breadcrumbs!]
@@ -615,7 +615,7 @@ enum Archive_SelectedDocs_RelationTo {
 union Archive_SelectedDocs = Post | Project
 
 type Post {
-  id: Int
+  id: String
   title: String
   categories: [Category!]
   publishedAt: DateTime
@@ -634,7 +634,7 @@ type Post {
 }
 
 type User {
-  id: Int
+  id: String
   name: String
   roles: [User_roles!]
   updatedAt: DateTime
@@ -1046,7 +1046,7 @@ enum Post__status {
 }
 
 type Project {
-  id: Int
+  id: String
   title: String
   categories: [Category!]
   publishedAt: DateTime
@@ -1451,6 +1451,189 @@ enum Archive_PopulatedDocs_RelationTo {
 
 union Archive_PopulatedDocs = Post | Project
 
+type ProfileEntries {
+  profiles: [ProfileEntries_Profiles!]
+  id: String
+  blockName: String
+  blockType: String
+}
+
+type ProfileEntries_Profiles {
+  size: ProfileEntries_Profiles_size
+  name: String
+  title: String
+  description(depth: Int): JSON
+  picture(where: ProfileEntries_Profiles_Picture_where): Media
+  enableLink: Boolean
+  link: String
+  id: String
+}
+
+enum ProfileEntries_Profiles_size {
+  oneThird
+  half
+  twoThirds
+  full
+}
+
+input ProfileEntries_Profiles_Picture_where {
+  alt: ProfileEntries_Profiles_Picture_alt_operator
+  caption: ProfileEntries_Profiles_Picture_caption_operator
+  updatedAt: ProfileEntries_Profiles_Picture_updatedAt_operator
+  createdAt: ProfileEntries_Profiles_Picture_createdAt_operator
+  url: ProfileEntries_Profiles_Picture_url_operator
+  filename: ProfileEntries_Profiles_Picture_filename_operator
+  mimeType: ProfileEntries_Profiles_Picture_mimeType_operator
+  filesize: ProfileEntries_Profiles_Picture_filesize_operator
+  width: ProfileEntries_Profiles_Picture_width_operator
+  height: ProfileEntries_Profiles_Picture_height_operator
+  id: ProfileEntries_Profiles_Picture_id_operator
+  AND: [ProfileEntries_Profiles_Picture_where_and]
+  OR: [ProfileEntries_Profiles_Picture_where_or]
+}
+
+input ProfileEntries_Profiles_Picture_alt_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input ProfileEntries_Profiles_Picture_caption_operator {
+  equals: JSON
+  not_equals: JSON
+  like: JSON
+  contains: JSON
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input ProfileEntries_Profiles_Picture_where_and {
+  alt: ProfileEntries_Profiles_Picture_alt_operator
+  caption: ProfileEntries_Profiles_Picture_caption_operator
+  updatedAt: ProfileEntries_Profiles_Picture_updatedAt_operator
+  createdAt: ProfileEntries_Profiles_Picture_createdAt_operator
+  url: ProfileEntries_Profiles_Picture_url_operator
+  filename: ProfileEntries_Profiles_Picture_filename_operator
+  mimeType: ProfileEntries_Profiles_Picture_mimeType_operator
+  filesize: ProfileEntries_Profiles_Picture_filesize_operator
+  width: ProfileEntries_Profiles_Picture_width_operator
+  height: ProfileEntries_Profiles_Picture_height_operator
+  id: ProfileEntries_Profiles_Picture_id_operator
+}
+
+input ProfileEntries_Profiles_Picture_where_or {
+  alt: ProfileEntries_Profiles_Picture_alt_operator
+  caption: ProfileEntries_Profiles_Picture_caption_operator
+  updatedAt: ProfileEntries_Profiles_Picture_updatedAt_operator
+  createdAt: ProfileEntries_Profiles_Picture_createdAt_operator
+  url: ProfileEntries_Profiles_Picture_url_operator
+  filename: ProfileEntries_Profiles_Picture_filename_operator
+  mimeType: ProfileEntries_Profiles_Picture_mimeType_operator
+  filesize: ProfileEntries_Profiles_Picture_filesize_operator
+  width: ProfileEntries_Profiles_Picture_width_operator
+  height: ProfileEntries_Profiles_Picture_height_operator
+  id: ProfileEntries_Profiles_Picture_id_operator
+}
+
 type Page_Meta {
   title: String
   description: String
@@ -1854,12 +2037,13 @@ enum Page__status_Input {
 }
 
 input Page_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -2597,7 +2781,7 @@ type PageVersion {
   createdAt: DateTime
   updatedAt: DateTime
   latest: Boolean
-  id: Int
+  id: String
 }
 
 type PageVersion_Version {
@@ -2820,7 +3004,7 @@ input PageVersion_Version_Hero_Media_where_or {
   id: PageVersion_Version_Hero_Media_id_operator
 }
 
-union PageVersion_Version_Layout = Cta | Content | MediaBlock | Archive
+union PageVersion_Version_Layout = Cta | Content | MediaBlock | Archive | ProfileEntries
 
 type PageVersion_Version_Meta {
   title: String
@@ -3266,12 +3450,13 @@ input versionsPage_latest_operator {
 }
 
 input versionsPage_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -3624,12 +3809,13 @@ enum Post__status_Input {
 }
 
 input Post_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -4570,7 +4756,7 @@ type PostVersion {
   createdAt: DateTime
   updatedAt: DateTime
   latest: Boolean
-  id: Int
+  id: String
 }
 
 type PostVersion_Version {
@@ -5313,12 +5499,13 @@ input versionsPost_latest_operator {
 }
 
 input versionsPost_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -5642,12 +5829,13 @@ enum Project__status_Input {
 }
 
 input Project_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -6432,7 +6620,7 @@ type ProjectVersion {
   createdAt: DateTime
   updatedAt: DateTime
   latest: Boolean
-  id: Int
+  id: String
 }
 
 type ProjectVersion_Version {
@@ -7123,12 +7311,13 @@ input versionsProject_latest_operator {
 }
 
 input versionsProject_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -7324,12 +7513,13 @@ input Media_height_operator {
 }
 
 input Media_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -7745,12 +7935,13 @@ input Category_createdAt_operator {
 }
 
 input Category_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -8112,12 +8303,13 @@ input User_email_operator {
 }
 
 input User_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -8328,7 +8520,7 @@ type usersMe {
 }
 
 type Comment {
-  id: Int
+  id: String
   user: User
   populatedUser: Comment_PopulatedUser
   doc: Post
@@ -8461,12 +8653,13 @@ enum Comment__status_Input {
 }
 
 input Comment_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -8757,7 +8950,7 @@ type CommentVersion {
   createdAt: DateTime
   updatedAt: DateTime
   latest: Boolean
-  id: Int
+  id: String
 }
 
 type CommentVersion_Version {
@@ -8934,12 +9127,13 @@ input versionsComment_latest_operator {
 }
 
 input versionsComment_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -8976,7 +9170,7 @@ input versionsComment_where_or {
 }
 
 type Redirect {
-  id: Int
+  id: String
   from: String!
   to: Redirect_To
   updatedAt: DateTime
@@ -9098,12 +9292,13 @@ input Redirect_createdAt_operator {
 }
 
 input Redirect_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -9331,7 +9526,7 @@ type RedirectsDeleteDocAccess {
 }
 
 type PayloadPreference {
-  id: Int
+  id: String
   user: PayloadPreference_User_Relationship!
   key: String
   value: JSON
@@ -9428,12 +9623,13 @@ input PayloadPreference_createdAt_operator {
 }
 
 input PayloadPreference_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -14588,26 +14784,26 @@ type FooterUpdateAccess {
 
 type Mutation {
   createPage(data: mutationPageInput!, draft: Boolean): Page
-  updatePage(id: Int!, autosave: Boolean, data: mutationPageUpdateInput!, draft: Boolean): Page
-  deletePage(id: Int!): Page
-  restoreVersionPage(id: Int): Page
+  updatePage(id: String!, autosave: Boolean, data: mutationPageUpdateInput!, draft: Boolean): Page
+  deletePage(id: String!): Page
+  restoreVersionPage(id: String): Page
   createPost(data: mutationPostInput!, draft: Boolean): Post
-  updatePost(id: Int!, autosave: Boolean, data: mutationPostUpdateInput!, draft: Boolean): Post
-  deletePost(id: Int!): Post
-  restoreVersionPost(id: Int): Post
+  updatePost(id: String!, autosave: Boolean, data: mutationPostUpdateInput!, draft: Boolean): Post
+  deletePost(id: String!): Post
+  restoreVersionPost(id: String): Post
   createProject(data: mutationProjectInput!, draft: Boolean): Project
-  updateProject(id: Int!, autosave: Boolean, data: mutationProjectUpdateInput!, draft: Boolean): Project
-  deleteProject(id: Int!): Project
-  restoreVersionProject(id: Int): Project
+  updateProject(id: String!, autosave: Boolean, data: mutationProjectUpdateInput!, draft: Boolean): Project
+  deleteProject(id: String!): Project
+  restoreVersionProject(id: String): Project
   createMedia(data: mutationMediaInput!, draft: Boolean): Media
-  updateMedia(id: Int!, autosave: Boolean, data: mutationMediaUpdateInput!, draft: Boolean): Media
-  deleteMedia(id: Int!): Media
+  updateMedia(id: String!, autosave: Boolean, data: mutationMediaUpdateInput!, draft: Boolean): Media
+  deleteMedia(id: String!): Media
   createCategory(data: mutationCategoryInput!, draft: Boolean): Category
-  updateCategory(id: Int!, autosave: Boolean, data: mutationCategoryUpdateInput!, draft: Boolean): Category
-  deleteCategory(id: Int!): Category
+  updateCategory(id: String!, autosave: Boolean, data: mutationCategoryUpdateInput!, draft: Boolean): Category
+  deleteCategory(id: String!): Category
   createUser(data: mutationUserInput!, draft: Boolean): User
-  updateUser(id: Int!, autosave: Boolean, data: mutationUserUpdateInput!, draft: Boolean): User
-  deleteUser(id: Int!): User
+  updateUser(id: String!, autosave: Boolean, data: mutationUserUpdateInput!, draft: Boolean): User
+  deleteUser(id: String!): User
   refreshTokenUser(token: String): usersRefreshedUser
   logoutUser: String
   unlockUser(email: String!): Boolean!
@@ -14616,15 +14812,15 @@ type Mutation {
   resetPasswordUser(password: String, token: String): usersResetPassword
   verifyEmailUser(token: String): Boolean
   createComment(data: mutationCommentInput!, draft: Boolean): Comment
-  updateComment(id: Int!, autosave: Boolean, data: mutationCommentUpdateInput!, draft: Boolean): Comment
-  deleteComment(id: Int!): Comment
-  restoreVersionComment(id: Int): Comment
+  updateComment(id: String!, autosave: Boolean, data: mutationCommentUpdateInput!, draft: Boolean): Comment
+  deleteComment(id: String!): Comment
+  restoreVersionComment(id: String): Comment
   createRedirect(data: mutationRedirectInput!, draft: Boolean): Redirect
-  updateRedirect(id: Int!, autosave: Boolean, data: mutationRedirectUpdateInput!, draft: Boolean): Redirect
-  deleteRedirect(id: Int!): Redirect
+  updateRedirect(id: String!, autosave: Boolean, data: mutationRedirectUpdateInput!, draft: Boolean): Redirect
+  deleteRedirect(id: String!): Redirect
   createPayloadPreference(data: mutationPayloadPreferenceInput!, draft: Boolean): PayloadPreference
-  updatePayloadPreference(id: Int!, autosave: Boolean, data: mutationPayloadPreferenceUpdateInput!, draft: Boolean): PayloadPreference
-  deletePayloadPreference(id: Int!): PayloadPreference
+  updatePayloadPreference(id: String!, autosave: Boolean, data: mutationPayloadPreferenceUpdateInput!, draft: Boolean): PayloadPreference
+  deletePayloadPreference(id: String!): PayloadPreference
   updateSettings(data: mutationSettingsInput!, draft: Boolean): Settings
   updateHeader(data: mutationHeaderInput!, draft: Boolean): Header
   updateFooter(data: mutationFooterInput!, draft: Boolean): Footer
@@ -14764,15 +14960,15 @@ enum PageUpdate__status_MutationInput {
 
 input mutationPostInput {
   title: String!
-  categories: [Int]
+  categories: [String]
   publishedAt: String
-  authors: [Int]
+  authors: [String]
   populatedAuthors: [mutationPost_PopulatedAuthorsInput]
   hero: mutationPost_HeroInput!
   layout: JSON
   enablePremiumContent: Boolean
   premiumContent: JSON
-  relatedPosts: [Int]
+  relatedPosts: [String]
   slug: String
   meta: mutationPost_MetaInput
   updatedAt: String
@@ -14841,15 +15037,15 @@ enum Post__status_MutationInput {
 
 input mutationPostUpdateInput {
   title: String
-  categories: [Int]
+  categories: [String]
   publishedAt: String
-  authors: [Int]
+  authors: [String]
   populatedAuthors: [mutationPostUpdate_PopulatedAuthorsInput]
   hero: mutationPostUpdate_HeroInput!
   layout: JSON
   enablePremiumContent: Boolean
   premiumContent: JSON
-  relatedPosts: [Int]
+  relatedPosts: [String]
   slug: String
   meta: mutationPostUpdate_MetaInput
   updatedAt: String
@@ -14918,11 +15114,11 @@ enum PostUpdate__status_MutationInput {
 
 input mutationProjectInput {
   title: String!
-  categories: [Int]
+  categories: [String]
   publishedAt: String
   hero: mutationProject_HeroInput!
   layout: JSON
-  relatedProjects: [Int]
+  relatedProjects: [String]
   slug: String
   meta: mutationProject_MetaInput
   updatedAt: String
@@ -14986,11 +15182,11 @@ enum Project__status_MutationInput {
 
 input mutationProjectUpdateInput {
   title: String
-  categories: [Int]
+  categories: [String]
   publishedAt: String
   hero: mutationProjectUpdate_HeroInput!
   layout: JSON
-  relatedProjects: [Int]
+  relatedProjects: [String]
   slug: String
   meta: mutationProjectUpdate_MetaInput
   updatedAt: String
@@ -15080,14 +15276,14 @@ input mutationMediaUpdateInput {
 
 input mutationCategoryInput {
   title: String
-  parent: Int
+  parent: String
   breadcrumbs: [mutationCategory_BreadcrumbsInput]
   updatedAt: String
   createdAt: String
 }
 
 input mutationCategory_BreadcrumbsInput {
-  doc: Int
+  doc: String
   url: String
   label: String
   id: String
@@ -15095,14 +15291,14 @@ input mutationCategory_BreadcrumbsInput {
 
 input mutationCategoryUpdateInput {
   title: String
-  parent: Int
+  parent: String
   breadcrumbs: [mutationCategoryUpdate_BreadcrumbsInput]
   updatedAt: String
   createdAt: String
 }
 
 input mutationCategoryUpdate_BreadcrumbsInput {
-  doc: Int
+  doc: String
   url: String
   label: String
   id: String
@@ -15171,9 +15367,9 @@ type usersResetPassword {
 }
 
 input mutationCommentInput {
-  user: Int
+  user: String
   populatedUser: mutationComment_PopulatedUserInput
-  doc: Int
+  doc: String
   comment: String
   updatedAt: String
   createdAt: String
@@ -15191,9 +15387,9 @@ enum Comment__status_MutationInput {
 }
 
 input mutationCommentUpdateInput {
-  user: Int
+  user: String
   populatedUser: mutationCommentUpdate_PopulatedUserInput
-  doc: Int
+  doc: String
   comment: String
   updatedAt: String
   createdAt: String
@@ -15291,8 +15487,8 @@ enum PayloadPreferenceUpdate_UserRelationshipInputRelationTo {
 }
 
 input mutationSettingsInput {
-  postsPage: Int
-  projectsPage: Int
+  postsPage: String
+  projectsPage: String
   updatedAt: String
   createdAt: String
 }
