@@ -27,6 +27,23 @@ export const CONTENT = `
 }
 `
 
+export const PROFILE_ENTRIES = `
+...on ProfileEntries {
+  blockType
+  profiles {
+    size
+    name
+    title
+    picture {
+      filename
+    }
+    description
+    enableLink
+    link
+  }
+}
+`
+
 export const MEDIA_BLOCK = `
 ...on MediaBlock {
   blockType
