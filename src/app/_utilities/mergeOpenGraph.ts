@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+// TODO: change this to our params
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
   siteName: 'Payload Website Template',
