@@ -1,16 +1,15 @@
 import dotenv from 'dotenv'
+import express from 'express'
 import next from 'next'
 import nextBuild from 'next/dist/build'
 import path from 'path'
+import payload from 'payload'
+
+import { seed } from './payload/seed'
 
 dotenv.config({
   path: path.resolve(__dirname, '../.env'),
 })
-
-import express from 'express'
-import payload from 'payload'
-
-import { seed } from './payload/seed'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -47,6 +46,11 @@ const start = async (): Promise<void> => {
   const nextHandler = nextApp.getRequestHandler()
 
   app.use((req, res) => nextHandler(req, res))
+  app.use(
+    express.json({
+      limit: process.env.UPLOAD_FILE_LIMIT,
+    }),
+  )
 
   nextApp.prepare().then(() => {
     payload.logger.info('Starting Next.js...')
